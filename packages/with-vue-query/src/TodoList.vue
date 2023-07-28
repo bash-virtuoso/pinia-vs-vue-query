@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import CreateTodoForm from './CreateTodoForm.vue'
 import TodoItem from './TodoItem.vue'
 import { useTodos } from './useTodos'
 
@@ -12,6 +13,7 @@ const { data: todos, isFetching, isLoading } = useTodos()
       <TodoItem :todo="todo" />
     </li>
   </ul>
+  <CreateTodoForm />
 </template>
 
 <style module>

@@ -16,6 +16,12 @@ useTodos.config = () =>
     },
   }) satisfies UseQueryOptions
 
+useTodos.create = (queryClient: QueryClient, createdTodo: Todo) => {
+  queryClient.setQueryData(useTodos.config().queryKey, (todos?: Todo[]) =>
+    [createdTodo].concat(todos ?? []),
+  )
+}
+
 useTodos.update = (queryClient: QueryClient, updatedTodo: Todo) => {
   queryClient.setQueryData(
     useTodos.config().queryKey,

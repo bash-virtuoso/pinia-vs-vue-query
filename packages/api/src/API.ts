@@ -1,3 +1,4 @@
+import { Items } from './main'
 import { Page } from './model/Page'
 import { Todo, TodoTemplate } from './model/Todo'
 
@@ -13,11 +14,11 @@ export class API {
   }
 
   todos = {
-    list: async (): Promise<Page<Todo>> => this.#get('/todos'),
-    create: async (todo: TodoTemplate): Promise<Todo> =>
-      this.#post('/todos', { body: JSON.stringify([todo]) }),
+    list: async (): Promise<Page<Todo>> => await this.#get('/todos'),
+    create: async (todo: TodoTemplate): Promise<Items<Todo>> =>
+      await this.#post('/todos', { body: JSON.stringify([todo]) }),
     update: async (todo: Todo): Promise<Todo> =>
-      this.#put(`/todos/${todo._uuid}`, { body: JSON.stringify(todo) }),
+      await this.#put(`/todos/${todo._uuid}`, { body: JSON.stringify(todo) }),
   }
 
   async #get<T>(path: string, init?: RequestInit): Promise<T> {
