@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import { API } from 'api'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref } from 'vue';
+import { useAPI } from './useAPI';
 
 const data = ref<string | null>(null)
+const api = useAPI()
 
 onMounted(async () => {
-  data.value = await API.dummy()
+  const response = await api.probe()
+  data.value = response.time
 })
 </script>
 
