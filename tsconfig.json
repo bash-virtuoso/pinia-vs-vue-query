@@ -5,6 +5,9 @@
       "path": "./packages/api/tsconfig.ref.json"
     },
     {
+      "path": "./packages/with-pinia/tsconfig.ref.json"
+    },
+    {
       "path": "./packages/with-vue-query/tsconfig.ref.json"
     }
   ]
