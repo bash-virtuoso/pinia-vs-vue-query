@@ -19,6 +19,11 @@ export class API {
       await this.#post('/todos', { body: JSON.stringify([todo]) }),
     update: async (todo: Todo): Promise<Todo> =>
       await this.#put(`/todos/${todo._uuid}`, { body: JSON.stringify(todo) }),
+    delete: async (todo: Todo): Promise<void> => await this.#delete(`/todos/${todo._uuid}`),
+  }
+
+  async #delete<T>(path: string, init?: RequestInit): Promise<T> {
+    return this.#request('DELETE', path, init)
   }
 
   async #get<T>(path: string, init?: RequestInit): Promise<T> {

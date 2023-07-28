@@ -29,3 +29,10 @@ useTodos.update = (queryClient: QueryClient, updatedTodo: Todo) => {
       todos?.map((oldTodo) => (oldTodo._uuid === updatedTodo._uuid ? updatedTodo : oldTodo)),
   )
 }
+
+useTodos.delete = (queryClient: QueryClient, deletedTodo: Todo) => {
+  queryClient.setQueryData(
+    useTodos.config().queryKey,
+    (todos?: Todo[]) => todos?.filter((todo) => todo._uuid !== deletedTodo._uuid),
+  )
+}
