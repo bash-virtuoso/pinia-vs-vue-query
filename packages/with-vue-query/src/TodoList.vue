@@ -1,13 +1,21 @@
 <script setup lang="ts">
-import { useTodos } from './useTodos';
+import TodoItem from './TodoItem.vue'
+import { useTodos } from './useTodos'
 
-const { data: todos } = useTodos()
+const { data: todos, isFetching, isLoading } = useTodos()
 </script>
 
 <template>
-  <ul>
+  <span v-if="isLoading">Loading...</span>
+  <ul v-else :class="[isFetching && $style.isFetching]">
     <li v-for="todo in todos" :key="todo._uuid">
-      {{ todo.title }}
+      <TodoItem :todo="todo" />
     </li>
   </ul>
 </template>
+
+<style module>
+.isFetching {
+  opacity: 0.5;
+}
+</style>
