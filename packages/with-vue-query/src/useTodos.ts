@@ -1,14 +1,12 @@
 import { UseQueryOptions, useQuery } from '@tanstack/vue-query'
-import { API } from 'api'
-import { useAPI } from './useAPI'
+import { api } from './api'
 
 export const useTodos = () => {
-  const api = useAPI()
   // TODO useInfiniteQuery
-  return useQuery({ ...useTodos.config(api) })
+  return useQuery({ ...useTodos.config() })
 }
 
-useTodos.config = (api: API) =>
+useTodos.config = () =>
   ({
     queryKey: ['todos'],
     queryFn: async () => {

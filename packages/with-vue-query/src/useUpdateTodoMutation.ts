@@ -1,10 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/vue-query'
 import { Todo } from 'api'
-import { useAPI } from './useAPI'
+import { api } from './api'
 import { useTodos } from './useTodos'
 
 export const useUpdateTodoMutation = () => {
-  const api = useAPI()
   const queryClient = useQueryClient()
 
   return useMutation({
