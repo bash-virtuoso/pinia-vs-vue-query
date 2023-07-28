@@ -1,10 +1,13 @@
 import vue from '@vitejs/plugin-vue'
+import { resolve } from 'path'
 import { defineConfig, loadEnv } from 'vite'
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
-  type Env = Record<'API_BASE_URL' | 'API_KEY' | 'VITE_API_BASE_URL', string>
-  const env: Env = loadEnv(mode, __dirname, '')
+  const env = {
+    ...loadEnv(mode, __dirname, ''),
+    ...loadEnv(mode, resolve(__dirname, '../..'), ''),
+  }
 
   return {
     plugins: [vue()],
