@@ -8,8 +8,8 @@ export const useUpdateTodoMutation = () => {
 
   return useMutation({
     mutationFn: async (todo: Todo) => await api.todos.update(todo),
-    onSuccess: () => {
-      queryClient.invalidateQueries(useTodos.config(api).queryKey)
+    onSuccess: (todo) => {
+      useTodos.update(queryClient, todo)
     },
   })
 }

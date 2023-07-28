@@ -1,4 +1,5 @@
-import { UseQueryOptions, useQuery } from '@tanstack/vue-query'
+import { QueryClient, UseQueryOptions, useQuery } from '@tanstack/vue-query'
+import { Todo } from 'api'
 import { api } from './api'
 
 export const useTodos = () => {
@@ -14,3 +15,11 @@ useTodos.config = () =>
       return response.items
     },
   }) satisfies UseQueryOptions
+
+useTodos.update = (queryClient: QueryClient, updatedTodo: Todo) => {
+  queryClient.setQueryData(
+    useTodos.config().queryKey,
+    (todos?: Todo[]) =>
+      todos?.map((oldTodo) => (oldTodo._uuid === updatedTodo._uuid ? updatedTodo : oldTodo)),
+  )
+}
