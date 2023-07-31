@@ -1,7 +1,8 @@
 import { Todo } from 'api'
-import { defineStore } from 'pinia'
+import { acceptHMRUpdate, defineStore } from 'pinia'
 import { onMounted, reactive, toRefs } from 'vue'
 import { api } from './api'
+import { onWindowFocused } from './onWindowFocused'
 
 type IdleState = { isFetching: false; isLoading: false; todos: null }
 type LoadingState = { isFetching: true; isLoading: true; todos: null }
@@ -13,15 +14,24 @@ export const useTodos = defineStore('todos', () => {
   const state = reactive<State>({ isFetching: false, isLoading: false, todos: null })
 
   const fetchTodos = async () => {
-    Object.assign(state, { isFetching: true, isLoading: state.todos == null })
+    try {
+      Object.assign(state, { isFetching: true, isLoading: state.todos == null })
 
-    const { items: todos } = await api.todos.list()
+      const { items: todos } = await api.todos.list()
 
-    Object.assign(state, { isFetching: false, isLoading: false, todos })
+      Object.assign(state, { isFetching: false, isLoading: false, todos })
+    } catch (e) {
+      console.error(e)
+    }
   }
 
   onMounted(() => {
-    fetchTodos().catch((e) => console.error(e))
+    fetchTodos()
+  })
+
+  onWindowFocused(() => {
+    if (state.isFetching) return
+    fetchTodos()
   })
 
   const onCreate = (createdTodo: Todo) => {
@@ -46,3 +56,7 @@ export const useTodos = defineStore('todos', () => {
     onDelete,
   }
 })
+
+if (import.meta.hot) {
+  import.meta.hot.accept(acceptHMRUpdate(useTodos, import.meta.hot))
+}
