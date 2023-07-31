@@ -28,8 +28,13 @@ export const useTodos = defineStore('todos', () => {
     state.todos = [createdTodo].concat(state.todos ?? [])
   }
 
+  const onDelete = (deletedTodo: Todo) => {
+    state.todos = state.todos?.filter((todo) => todo._uuid !== deletedTodo._uuid) ?? null
+  }
+
   return {
     ...toRefs(state),
     onCreate,
+    onDelete,
   }
 })
