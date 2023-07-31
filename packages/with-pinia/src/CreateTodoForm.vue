@@ -1,19 +1,18 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useCreateTodoMutation } from './useCreateTodoMutation'
+import { useTodos } from './useTodos'
 
 const title = ref('')
 
-const { createTodo } = useCreateTodoMutation({
-  onSuccess: () => {
-    title.value = ''
-  },
-})
-const handleSubmit = () => {
-  createTodo({
+const { createTodo } = useTodos()
+
+const handleSubmit = async () => {
+  await createTodo({
     title: title.value,
     isComplete: false,
   })
+
+  title.value = ''
 }
 </script>
 

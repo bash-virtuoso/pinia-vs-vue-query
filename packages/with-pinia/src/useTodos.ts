@@ -1,4 +1,4 @@
-import { Todo } from 'api'
+import { Todo, TodoTemplate } from 'api'
 import { acceptHMRUpdate, defineStore } from 'pinia'
 import { onMounted, reactive, toRefs } from 'vue'
 import { api } from './api'
@@ -14,6 +14,7 @@ export const useTodos = defineStore('todos', () => {
   const state = reactive<State>({ isFetching: false, isLoading: false, todos: null })
 
   const fetchTodos = async () => {
+    if (state.isFetching) return
     try {
       Object.assign(state, { isFetching: true, isLoading: state.todos == null })
 
@@ -30,30 +31,49 @@ export const useTodos = defineStore('todos', () => {
   })
 
   onWindowFocused(() => {
-    if (state.isFetching) return
     fetchTodos()
   })
 
-  const onCreate = (createdTodo: Todo) => {
-    state.todos = [createdTodo].concat(state.todos ?? [])
+  const createTodo = async (todoTemplate: TodoTemplate) => {
+    try {
+      const {
+        items: [todo],
+      } = await api.todos.create(todoTemplate)
+
+      state.todos = [todo].concat(state.todos ?? [])
+    } catch (e) {
+      console.error(e)
+    }
   }
 
-  const onUpdate = (updatedTodo: Todo) => {
-    state.todos =
-      state.todos?.map((oldTodo) =>
-        oldTodo._uuid === updatedTodo._uuid ? updatedTodo : oldTodo,
-      ) ?? null
+  const updateTodo = async (todo: Todo) => {
+    try {
+      const updatedTodo = await api.todos.update(todo)
+
+      state.todos =
+        state.todos?.map((oldTodo) =>
+          oldTodo._uuid === updatedTodo._uuid ? updatedTodo : oldTodo,
+        ) ?? null
+    } catch (e) {
+      console.error(e)
+    }
   }
 
-  const onDelete = (deletedTodo: Todo) => {
-    state.todos = state.todos?.filter((todo) => todo._uuid !== deletedTodo._uuid) ?? null
+  const deleteTodo = async (todo: Todo) => {
+    try {
+      await api.todos.delete(todo)
+
+      state.todos = state.todos?.filter((oldTodo) => oldTodo._uuid !== todo._uuid) ?? null
+    } catch (e) {
+      console.error(e)
+    }
   }
 
   return {
     ...toRefs(state),
-    onCreate,
-    onUpdate,
-    onDelete,
+    createTodo,
+    updateTodo,
+    deleteTodo,
   }
 })
 

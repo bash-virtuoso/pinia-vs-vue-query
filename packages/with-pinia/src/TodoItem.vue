@@ -1,23 +1,27 @@
 <script setup lang="ts">
 import { Todo } from 'api'
 import { ref } from 'vue'
-import { useDeleteTodoMutation } from './useDeleteTodoMutation'
-import { useUpdateTodoMutation } from './useUpdateTodoMutation'
+import { useTodos } from './useTodos'
 
 const props = defineProps<{
   todo: Todo
 }>()
 
+const { updateTodo, deleteTodo } = useTodos()
+
 const checkbox = ref<HTMLInputElement>(null!)
-const { updateTodo, isLoading } = useUpdateTodoMutation()
-const handleChange = () => {
+const isLoading = ref(false)
+const handleChange = async () => {
+  isLoading.value = true
+
   const isComplete = checkbox.value.checked
-  updateTodo({ ...props.todo, isComplete })
+  await updateTodo({ ...props.todo, isComplete })
+
+  isLoading.value = false
 }
 
-const { deleteTodo } = useDeleteTodoMutation()
-const handleDelete = () => {
-  deleteTodo(props.todo)
+const handleDelete = async () => {
+  await deleteTodo(props.todo)
 }
 
 const CROSS = '\u2a2f' // ⨯
