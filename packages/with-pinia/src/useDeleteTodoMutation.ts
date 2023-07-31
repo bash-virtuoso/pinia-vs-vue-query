@@ -1,4 +1,4 @@
-import { Todo } from '../../api/src/main'
+import { Todo } from 'api'
 import { api } from './api'
 import { useTodos } from './useTodos'
 

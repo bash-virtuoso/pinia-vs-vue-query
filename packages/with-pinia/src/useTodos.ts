@@ -28,6 +28,13 @@ export const useTodos = defineStore('todos', () => {
     state.todos = [createdTodo].concat(state.todos ?? [])
   }
 
+  const onUpdate = (updatedTodo: Todo) => {
+    state.todos =
+      state.todos?.map((oldTodo) =>
+        oldTodo._uuid === updatedTodo._uuid ? updatedTodo : oldTodo,
+      ) ?? null
+  }
+
   const onDelete = (deletedTodo: Todo) => {
     state.todos = state.todos?.filter((todo) => todo._uuid !== deletedTodo._uuid) ?? null
   }
@@ -35,6 +42,7 @@ export const useTodos = defineStore('todos', () => {
   return {
     ...toRefs(state),
     onCreate,
+    onUpdate,
     onDelete,
   }
 })
