@@ -7,13 +7,13 @@ const { data: todos, isFetching, isLoading } = useTodos()
 </script>
 
 <template>
+  <CreateTodoForm />
   <span v-if="isLoading">Loading...</span>
   <ul v-else :class="[isFetching && $style.isFetching]">
     <li v-for="todo in todos" :key="todo._uuid">
       <TodoItem :todo="todo" />
     </li>
   </ul>
-  <CreateTodoForm />
 </template>
 
 <style module>

@@ -24,7 +24,12 @@ export const useTodos = defineStore('todos', () => {
     fetchTodos().catch((e) => console.error(e))
   })
 
+  const onCreate = (createdTodo: Todo) => {
+    state.todos = [createdTodo].concat(state.todos ?? [])
+  }
+
   return {
     ...toRefs(state),
+    onCreate,
   }
 })
